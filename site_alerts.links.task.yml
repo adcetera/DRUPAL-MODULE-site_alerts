@@ -1,0 +1,9 @@
+site_alerts.settings.tab:
+  title: 'Alert settings'
+  route_name: site_alerts.settings_form
+  base_route: site_alerts.settings_form
+
+site_alerts.styles.tab:
+  title: 'Alert styles'
+  route_name: site_alerts.styles_form
+  base_route: site_alerts.settings_form

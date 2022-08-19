@@ -55,8 +55,21 @@ function site_alerts_page_attachments(array &$attachments) {
       ];
     }
 
+    // Styles
+    $styleSettings = [];
+    $stylesValue = explode(",", $config->get('styles'));
+    foreach ($stylesValue as $sKey => $sValue) {
+      $style = explode('|', $sValue);
+      if ($style[0] === $config->get('style')) {
+        $styleSettings = [
+          'background' => $style[1],
+          'text' => $style[2]
+        ];
+      }
+    }
+
     $drupalSettings = [
-      'style' => $config->get('style'),
+      'style' => $styleSettings,
       'message' => $config->get('message'),
       'scheduled' => $scheduling,
       'pages' => $pageLimiting

@@ -26,10 +26,11 @@
       const settingsObj = drupalSettings.site_alerts;
 
       // Get settings
-      const message   = settingsObj.message,
-            style     = settingsObj.style,
-            scheduled = settingsObj.scheduled,
-            pages     = settingsObj.pages;
+      const message     = settingsObj.message,
+            background  = settingsObj.style.background,
+            text        = settingsObj.style.text,
+            scheduled   = settingsObj.scheduled,
+            pages       = settingsObj.pages;
 
       let schedulePasses = true;
       let pagesPasses = true;
@@ -89,7 +90,7 @@
 
       if (schedulePasses && pagesPasses) {
         value.innerHTML = `
-          <div class="sitewide-alert alert alert-${style}" role="alert">
+          <div class="sitewide-alert alert" role="alert" style="background-color: ${background}; color: ${text};">
             ${message}
           </div>
         `;

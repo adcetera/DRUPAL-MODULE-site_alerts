@@ -1,6 +1,7 @@
 enabled: false
 name:
-style:
+styles:
+selected_style:
 message:
 scheduled: false
 start_date:
