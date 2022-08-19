@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * Implements hook_page_top().
+ */
+function site_alerts_page_top(array &$page_top) {
+  $config = \Drupal::config('site_alerts.settings');
+  if (isset($config) && $config->get('enabled')) {
+
+    // Don't display on admin routes
+    if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+      return;
+    }
+
+    // Add the container to the page to be populated via JavaScript
+    $page_top['alert_bar'] = [
+      '#markup' => '<div id="site-alerts"></div>',
+    ];
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function site_alerts_page_attachments(array &$attachments) {
+  $config = \Drupal::config('site_alerts.settings');
+  if (isset($config) && $config->get('enabled')) {
+
+    // Scheduling
+    $scheduling = [];
+    if ($config->get('scheduled')) {
+
+      $start = '';
+      if (!empty($config->get('start_date'))) {
+        $start = new Drupal\Core\Datetime\DrupalDateTime($config->get('start_date'));
+      }
+
+      $end = '';
+      if (!empty($config->get('end_date'))) {
+        $end = new Drupal\Core\Datetime\DrupalDateTime($config->get('end_date'));
+      }
+
+      $scheduling = [
+        'start' => !empty($config->get('start_date')) ? $start->getTimestamp() : '',
+        'end' => !empty($config->get('end_date')) ? $end->getTimestamp() : '',
+      ];
+    }
+
+    // Page limiting
+    $pageLimiting = [];
+    if ($config->get('limit_by_page')) {
+      $pageLimiting = [
+        'pages' => $config->get('pages'),
+        'show_hide' => $config->get('show_hide_pages')
+      ];
+    }
+
+    $drupalSettings = [
+      'style' => $config->get('style'),
+      'message' => $config->get('message'),
+      'scheduled' => $scheduling,
+      'pages' => $pageLimiting
+    ];
+
+    // Attach the library and drupalSettings
+    $attachments['#attached']['library'][] = 'site_alerts/base';
+    $attachments['#attached']['drupalSettings']['site_alerts'] = $drupalSettings;
+  }
+}

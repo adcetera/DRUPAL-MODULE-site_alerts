@@ -1,0 +1,10 @@
+enabled: false
+name:
+style:
+message:
+scheduled: false
+start_date:
+end_date:
+limit_by_page: false
+pages:
+show_hide_pages:

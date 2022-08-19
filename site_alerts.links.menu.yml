@@ -1,0 +1,6 @@
+site_alerts.settings:
+  title: 'Site wide alerts settings'
+  route_name: site_alerts.settings_form
+  description: 'Configure the site wide alert settings.'
+  parent: system.admin_config_ui
+  weight: 99

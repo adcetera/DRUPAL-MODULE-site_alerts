@@ -1,0 +1,7 @@
+name: Site Alerts
+description: Displays an alert message at the top of the website.
+type: module
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:datetime_range
+  - drupal:options

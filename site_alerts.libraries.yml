@@ -1,0 +1,12 @@
+base:
+  version: VERSION
+  css:
+    theme:
+      css/alerts.css: {}
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js: { type: external, minified: true }
+    js/site-alerts.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
