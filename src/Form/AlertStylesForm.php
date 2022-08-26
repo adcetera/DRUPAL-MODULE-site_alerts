@@ -41,6 +41,13 @@ class AlertStylesForm extends ConfigFormBase {
       $styles = implode("\n", $stylesValue);
     }
 
+    $form['chkStickyHeader'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Site has sticky header'),
+      '#description' => $this->t('If the site theme leverages a sticky header, check this option. This will push the header down to accommodate the alert (if visible).'),
+      '#default_value' => $config->get('sticky_header')
+    ];
+
     $form['txtStyles'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Styles'),
@@ -67,6 +74,7 @@ class AlertStylesForm extends ConfigFormBase {
     }
 
     $this->configFactory->getEditable('site_alerts.settings')
+      ->set('sticky_header', $form_state->getValue('chkStickyHeader') ? $form_state->getValue('chkStickyHeader') : false)
       ->set('styles', implode(',', $styleOptions))
       ->save();
   }

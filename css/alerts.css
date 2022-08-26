@@ -1,19 +1,55 @@
 .sitewide-alert {
-    padding: 5px;
-    text-align: center;
-    position: relative;
+  padding: 5px;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
 .sitewide-alert p {
-    margin: 20px 0;
+  margin: 20px 40px 20px 0;
 }
 
-.sitewide-alert .close {
-    float: right;
+.sitewide-alert button {
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translate(0, -50%);
+  cursor: pointer;
 }
 
-.sitewide-alert__message,
-.sitewide-alert .field--name-message {
-    /* Prevent the message from pushing down the close icon. */
-    display: inline-block;
+.sitewide-alert button::before {
+  content: '';
+  height: 2px;
+  width: 90%;
+  position: absolute;
+  left: calc(10% - 1px);
+  top: 50%;
+  transform: translate(0, -50%) rotate(45deg);
+}
+
+.sitewide-alert button::after {
+  content: '';
+  height: 2px;
+  width: 90%;
+  position: absolute;
+  left: calc(10% - 1px);
+  top: 50%;
+  transform: translate(0, -50%) rotate(-45deg);
+}
+
+@media (max-width: 992px) {
+  .sitewide-alert {
+    text-align: left;
+  }
+
+  .sitewide-alert p {
+    margin: 10px 40px 10px 10px;
+  }
 }

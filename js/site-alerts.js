@@ -1,6 +1,8 @@
 (function (Drupal, drupalSettings) {
   'use strict';
 
+  const _alertSessionKey = 'siteAlertsSessionKey';
+
   /**
    * Attaches the alerts JavaScript
    *
@@ -27,10 +29,39 @@
 
       // Get settings
       const message     = settingsObj.message,
+            dismissable = settingsObj.dismissable,
+            sticky      = settingsObj.sticky,
             background  = settingsObj.style.background,
             text        = settingsObj.style.text,
             scheduled   = settingsObj.scheduled,
             pages       = settingsObj.pages;
+
+      let dismissMarkup = '';
+      let sessionToken = '';
+      if (dismissable) {
+        dismissMarkup = `
+          <style>
+            .sitewide-alert button::before,
+            .sitewide-alert button::after {
+              background: ${text};
+            }
+          </style>
+          <button type="button" id="alertDismiss" aria-label="Close notification bar"></button>
+        `;
+
+        // Build session token to force visibility of the message if
+        // any of the configuration changes.
+        sessionToken = [
+          message,
+          dismissable,
+          sticky,
+          background,
+          text,
+          scheduled,
+          pages
+        ].join('|');
+        sessionToken = btoa(sessionToken);
+      }
 
       let schedulePasses = true;
       let pagesPasses = true;
@@ -89,11 +120,32 @@
       }
 
       if (schedulePasses && pagesPasses) {
+        if (dismissable) {
+          if (!checkSessionToken(sessionToken)) {
+            return;
+          }
+        }
+
         value.innerHTML = `
-          <div class="sitewide-alert alert" role="alert" style="background-color: ${background}; color: ${text};">
+          <div class="sitewide-alert" role="alert" style="background-color: ${background}; color: ${text};">
             ${message}
+            ${dismissMarkup}
           </div>
         `;
+
+        if (sticky) {
+          adjustSiteHeader();
+          window.addEventListener('resize', adjustSiteHeader);
+        }
+      }
+
+      if (dismissable) {
+        document.getElementById('alertDismiss').addEventListener('click', function() {
+          document.getElementById('site-alerts').remove();
+          window.localStorage.setItem(_alertSessionKey, sessionToken);
+          window.removeEventListener('resize', adjustSiteHeader);
+          adjustSiteHeader();
+        });
       }
     }
   }
@@ -108,6 +160,32 @@
       return window.location.pathname.toLowerCase() + window.location.search;
     }
     return window.location.pathname.toLowerCase();
+  }
+
+  /**
+   * Checks if a session token is set and compares the value
+   *
+   * @param {string} sessionKey
+   * @returns {boolean}
+   */
+  function checkSessionToken(sessionKey) {
+    let activeSession = window.localStorage.getItem(_alertSessionKey);
+    return !(activeSession && (activeSession === sessionKey));
+  }
+
+  function adjustSiteHeader() {
+    const header = document.querySelector('header');
+    const alertElement = document.querySelector('.sitewide-alert');
+    if (header) {
+      const headerStyles = getComputedStyle(header);
+      if (headerStyles.position === 'fixed') {
+        if (alertElement) {
+          header.style.top = alertElement.offsetHeight + 'px';
+        } else {
+          header.style.top = '0px';
+        }
+      }
+    }
   }
 
 })(Drupal, drupalSettings);

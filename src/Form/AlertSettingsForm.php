@@ -104,6 +104,17 @@ class AlertSettingsForm extends ConfigFormBase {
       ]
     ];
 
+    $form['chkDismissable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Alert is dismissable'),
+      '#default_value' => $config->get('dismissable'),
+      '#states' => [
+        'visible' => [
+          ':input[name="chkEnabled"]' => array('checked' => TRUE),
+        ],
+      ]
+    ];
+
     $form['chkScheduled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Schedule alert'),
@@ -214,6 +225,7 @@ class AlertSettingsForm extends ConfigFormBase {
       ->set('name', $form_state->getValue('chkEnabled') ? $form_state->getValue('txtName') : '')
       ->set('style', $form_state->getValue('chkEnabled') ? $form_state->getValue('selStyle') : '')
       ->set('message', $form_state->getValue('chkEnabled') ? $form_state->getValue('txtMessage')['value'] : '')
+      ->set('dismissable', $form_state->getValue('chkDismissable') ? $form_state->getValue('chkDismissable') : false)
       ->set('scheduled', $form_state->getValue('chkEnabled') ? $form_state->getValue('chkScheduled') : false)
       ->set('start_date', $form_state->getValue('chkEnabled') && $form_state->getValue('chkScheduled') ? $startDate : '')
       ->set('end_date', $form_state->getValue('chkEnabled') && $form_state->getValue('chkScheduled') ? $endDate : '')

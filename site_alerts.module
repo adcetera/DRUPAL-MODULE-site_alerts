@@ -71,6 +71,8 @@ function site_alerts_page_attachments(array &$attachments) {
     $drupalSettings = [
       'style' => $styleSettings,
       'message' => $config->get('message'),
+      'dismissable' => $config->get('dismissable'),
+      'sticky' => $config->get('sticky_header'),
       'scheduled' => $scheduling,
       'pages' => $pageLimiting
     ];
