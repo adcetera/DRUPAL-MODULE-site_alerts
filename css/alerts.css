@@ -1,15 +1,31 @@
 .sitewide-alert {
-  padding: 5px;
-  text-align: center;
-  position: fixed;
   width: 100%;
+  padding: 30px;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 9000;
+}
+
+.sitewide-alert-shim {
+  width: 100%;
+  pointer-events: none;
+}
+
+.sitewide-alert h1,
+.sitewide-alert h2,
+.sitewide-alert h3,
+.sitewide-alert h4,
+.sitewide-alert h5,
+.sitewide-alert h6 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: clamp(16px, 4.25vw, 25px);
 }
 
 .sitewide-alert p {
-  margin: 20px 40px 20px 0;
+  margin: 0 40px 0 0;
+  font-size: 14px;
 }
 
 .sitewide-alert button {
@@ -18,9 +34,8 @@
   background: transparent;
   border: none;
   position: absolute;
-  top: 50%;
+  top: 15px;
   right: 15px;
-  transform: translate(0, -50%);
   cursor: pointer;
 }
 
@@ -42,14 +57,4 @@
   left: calc(10% - 1px);
   top: 50%;
   transform: translate(0, -50%) rotate(-45deg);
-}
-
-@media (max-width: 992px) {
-  .sitewide-alert {
-    text-align: left;
-  }
-
-  .sitewide-alert p {
-    margin: 10px 40px 10px 10px;
-  }
 }

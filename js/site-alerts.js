@@ -29,12 +29,12 @@
 
       // Get settings
       const message     = settingsObj.message,
-            dismissable = settingsObj.dismissable,
-            sticky      = settingsObj.sticky,
-            background  = settingsObj.style.background,
-            text        = settingsObj.style.text,
-            scheduled   = settingsObj.scheduled,
-            pages       = settingsObj.pages;
+        dismissable = settingsObj.dismissable,
+        sticky      = settingsObj.sticky,
+        background  = settingsObj.style.background,
+        text        = settingsObj.style.text,
+        scheduled   = settingsObj.scheduled,
+        pages       = settingsObj.pages;
 
       let dismissMarkup = '';
       let sessionToken = '';
@@ -127,10 +127,29 @@
         }
 
         value.innerHTML = `
-          <div class="sitewide-alert" role="alert" style="background-color: ${background}; color: ${text};">
+<style>
+.sitewide-alert {
+    background: ${background};
+    color: ${text};
+}
+.sitewide-alert h1,
+.sitewide-alert h2,
+.sitewide-alert h3,
+.sitewide-alert h4,
+.sitewide-alert h5,
+.sitewide-alert h6 {
+    color: ${text};
+}
+.sitewide-alert a {
+    color: ${text};
+    text-decoration: underline;
+}
+</style>
+          <div class="sitewide-alert" role="alert">
             ${message}
             ${dismissMarkup}
           </div>
+          <div class="sitewide-alert-shim"></div>
         `;
 
         if (sticky) {
@@ -175,14 +194,31 @@
 
   function adjustSiteHeader() {
     const header = document.querySelector('header');
+    const headerChildren = document.createTreeWalker(
+      header,
+      NodeFilter.SHOW_ELEMENT,
+      { acceptNode: function(node) { return NodeFilter.FILTER_ACCEPT; } }
+    );
+    const headerChildrenNode = headerChildren.nextNode();
+    const shim = document.querySelector('.sitewide-alert-shim');
     const alertElement = document.querySelector('.sitewide-alert');
+
     if (header) {
       const headerStyles = getComputedStyle(header);
+      const headerChildrenStyles = getComputedStyle(headerChildrenNode);
       if (headerStyles.position === 'fixed') {
         if (alertElement) {
           header.style.top = alertElement.offsetHeight + 'px';
+          shim.style.height = alertElement.offsetHeight + 'px';
         } else {
           header.style.top = '0px';
+        }
+      } else if(headerChildrenStyles.position === 'fixed') {
+        if (alertElement) {
+          headerChildrenNode.style.top = alertElement.offsetHeight + 'px';
+          shim.style.height = alertElement.offsetHeight + 'px';
+        } else {
+          headerChildrenNode.style.top = '0px';
         }
       }
     }
