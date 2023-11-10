@@ -169,7 +169,6 @@ class AlertSettingsForm extends ConfigFormBase {
       '#open' => TRUE,
       '#states' => [
         'visible' => [
-          ':input[name="chkEnabled"]' => array('checked' => TRUE),
           ':input[name="chkPageLimit"]' => array('checked' => TRUE),
         ],
       ]

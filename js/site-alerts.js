@@ -1,4 +1,4 @@
-(function (Drupal, drupalSettings) {
+(function (Drupal, drupalSettings, once) {
   'use strict';
 
   const _alertSessionKey = 'siteAlertsSessionKey';
@@ -154,7 +154,7 @@
 
         if (sticky) {
           adjustSiteHeader();
-          window.addEventListener('resize', adjustSiteHeader);
+          window.addEventListener('resize', Drupal.debounce(adjustSiteHeader, 250, false));
         }
       }
 
@@ -192,6 +192,9 @@
     return !(activeSession && (activeSession === sessionKey));
   }
 
+  /**
+   * Adjusts the position of the site header to account for the alert
+   */
   function adjustSiteHeader() {
     const header = document.querySelector('header');
     const headerChildren = document.createTreeWalker(
@@ -224,4 +227,4 @@
     }
   }
 
-})(Drupal, drupalSettings);
+})(Drupal, drupalSettings, once);
