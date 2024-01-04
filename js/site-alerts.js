@@ -29,7 +29,7 @@
 
       // Get settings
       const message     = settingsObj.message,
-        dismissable = settingsObj.dismissable,
+        dismissible = settingsObj.dismissable,
         sticky      = settingsObj.sticky,
         background  = settingsObj.style.background,
         text        = settingsObj.style.text,
@@ -38,7 +38,7 @@
 
       let dismissMarkup = '';
       let sessionToken = '';
-      if (dismissable) {
+      if (dismissible) {
         dismissMarkup = `
           <style>
             .sitewide-alert button::before,
@@ -49,11 +49,17 @@
           <button type="button" id="alertDismiss" aria-label="Close notification bar"></button>
         `;
 
+        // Create message token based on message without special characters
+        let messageToken = message;
+        if (messageToken !== "") {
+          messageToken = messageToken.replace(/[^a-z0-9]/gi, "");
+        }
+
         // Build session token to force visibility of the message if
         // any of the configuration changes.
         sessionToken = [
-          message,
-          dismissable,
+          messageToken,
+          dismissible,
           sticky,
           background,
           text,
@@ -120,7 +126,7 @@
       }
 
       if (schedulePasses && pagesPasses) {
-        if (dismissable) {
+        if (dismissible) {
           if (!checkSessionToken(sessionToken)) {
             return;
           }
@@ -158,7 +164,7 @@
         }
       }
 
-      if (dismissable) {
+      if (dismissible) {
         document.getElementById('alertDismiss').addEventListener('click', function() {
           document.getElementById('site-alerts').remove();
           window.localStorage.setItem(_alertSessionKey, sessionToken);
