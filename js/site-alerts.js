@@ -162,15 +162,15 @@
           adjustSiteHeader();
           window.addEventListener('resize', Drupal.debounce(adjustSiteHeader, 250, false));
         }
-      }
 
-      if (dismissible) {
-        document.getElementById('alertDismiss').addEventListener('click', function() {
-          document.getElementById('site-alerts').remove();
-          window.localStorage.setItem(_alertSessionKey, sessionToken);
-          window.removeEventListener('resize', adjustSiteHeader);
-          adjustSiteHeader();
-        });
+        if (dismissible) {
+          document.getElementById('alertDismiss').addEventListener('click', function() {
+            document.getElementById('site-alerts').remove();
+            window.localStorage.setItem(_alertSessionKey, sessionToken);
+            window.removeEventListener('resize', adjustSiteHeader);
+            adjustSiteHeader();
+          });
+        }
       }
     }
   }
